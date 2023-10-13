@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+   <style>
         html, body {
             width: 100%;
             height: 100%;
@@ -19,6 +21,7 @@
             background-color: #202020;
             font-family: Arial, sans-serif;
         }
+
 
         .container {
             max-width: 1200px;
@@ -34,22 +37,42 @@
             padding: 10px; /* Padding for better spacing */
         }
 
+         
+        .form-rounded {
+            border-radius: 1rem;
+        }
+         
+
+
+
         #messages {
             list-style-type: none;
             margin: 0;
             padding: 0;
-            background-color: white;
+            background-color: whitespace;
+            border-radius: 5px;
+            background-color: #0096FF	;
+
+
+            
         }
 
         #messages > li {
             padding: 0.5rem 1rem;
             border-style: solid;
             border-color: #202020;
+            border-radius: 10px;
+
         }
 
         #input {
             width: 100%; /* Make the input field full width */
         }
+
+
+
+
+        
 
         @media (max-width: 768px) {
             .backgroundimg {
@@ -91,8 +114,8 @@
         <ul id="messages"></ul>
         <br>
         <form id="form">
-            <div class="form-input-container">
-                <textarea id="input" placeholder="Enter the message <%= username %> (only 125 characters in one line)" name="message" rows="4" cols="70"></textarea>
+            <div class="form-input-container ">
+                <textarea id="input" placeholder="Enter the message <%= username %>" name="message" rows="4" cols="70"></textarea>
             </div>
             <div class="form-button-container">
                 <input type="submit" value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
@@ -103,66 +126,44 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
-        var myname1 = document.getElementById('myname');
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
-
+    
         form.addEventListener("submit", function (e) {
             e.preventDefault();
-            if (input.value && myname1.value) {
-                socket.emit('send name', myname1.value);
-                socket.emit('chat message', input.value);
+            var myname1 = document.getElementById('myname').value;
+            var message = input.value;
+            
+            if (message && myname1) {
+                var chatMessage = myname1 + ": " + message;
+                socket.emit('chat message', chatMessage);
                 input.value = '';
             }
         });
-
-        socket.on('send name', (username) => {
-            var name = document.createElement('li');
-            name.textContent = username + " :";
-
-            // Adjust styles for different screen sizes
-            if (window.innerWidth <= 768) {
-                name.style.backgroundColor = "#0096FF";
-                name.style.color = "white";
-                name.style.textAlign = "center";
-                name.style.padding = "5px";
-            } else if (window.innerWidth <= 1024) {
-                name.style.backgroundColor = "#0096FF";
-                name.style.color = "white";
-                name.style.textAlign = "center";
-                name.style.padding = "10px";
-            } else {
-                name.style.backgroundColor = "transparent";
-                name.style.color = "black";
-                name.style.textAlign = "left";
-                name.style.padding = "10px";
-            }
-
-            messages.appendChild(name);
-        });
-
+    
         socket.on('chat message', function (msg) {
-            var item = document.createElement('li');
-            item.textContent = msg;
-
+            var messageElement = document.createElement('li');
+            messageElement.textContent = msg;
+            
             // Adjust styles for different screen sizes
             if (window.innerWidth <= 768) {
-                item.style.padding = "5px";
+                messageElement.style.padding = "5px";
             } else if (window.innerWidth <= 1024) {
-                item.style.padding = "10px";
+                messageElement.style.padding = "10px";
             } else {
-                item.style.padding = "15px";
+                messageElement.style.padding = "15px";
             }
-
-            messages.appendChild(item);
+    
+            messages.appendChild(messageElement);
         });
-
+    
         // Add a window resize event listener to update styles on screen size changes
         window.addEventListener("resize", function () {
             // Handle screen size changes here
             // You can adjust styles dynamically based on the new window.innerWidth
         });
     </script>
+    
 </body>
 </html>
