@@ -1,91 +1,86 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Chat App</title>
-
-
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-
-
-
-      <style>
-
-     html{
-            width:100%;
-            height:100%;
-         }
-         
-     body{
-            width:100%;
-            height:100%;
-          }
-
-
-         .form-container {
-            margin: 125px 620px 50px 600px;
-            border-style: solid;
-            width: fit-content;
-            block-size: fit-content;
-            border-color: rgb(203, 203, 203);
-            border-width: 3px;
-            padding: 10px;
-            text-align: right;
-
-         }
-         
-          .fit{
-            width: fit-content; 
-            block-size: fit-content;
-          }
-         
-         .backgroundimg{
-            background-image: url('images/space10.jpg');
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        html {
+            width: 100%;
             height: 100%;
-            background-position: center; 
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-image: url('images/space10.jpg');
+            background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-         }
-      </style>
-        
-</head> 
-   
+            font-family: Arial, sans-serif;
+        }
 
+        .form-container {
+            margin: 10% auto;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            max-width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
 
-    <body class="backgroundimg"> 
-         <br>
-       <div class="text-center">
-         <br>
-         <br>
-         <br>
-         <h1 style="color: rgb(255, 255, 255);"><b>Chat application</b></h1>
-         <h5 style="color: white;"><i>'Chat your way to happiness!'</i></h5> 
-          </div>
-          <form action="/" method="post">
-          <div class="form-container" style=" background-color: transparent;">
-            
-            <div style="padding-bottom: 10px;">
-            <label style="color:white">Username:</label>
-            <input type="text" placeholder="Enter name" name='uname' required>
-         </div>
-            
-           <div>
-           <label style="color: white;">Room:</label>
-           <input type="text" placeholder="Enter room number" name='uroom' required>
-         </div>
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
 
-         <div style="margin-top: 10px; "> <input class="btn btn-primary" type="submit" value="Enter">
-         </div>
-          </div>
-         </form>
-       
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-       
-   
-      
-   
-   
-   </body>
+        .form-container .btn {
+            width: 100%;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .text-center {
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h1><b>Chat application</b></h1>
+        <h5><i>'Chat your way to happiness!'</i></h5>
+    </div>
+    <form action="/" method="post">
+        <div class="form-container" style=" background-color: transparent;">
+            <div>
+                <label style="color: whitesmoke;">Username:</label>
+                <input type="text" placeholder="Enter name" name="uname" required>
+            </div>
+            <div>
+                <label style="color: whitesmoke;">Room:</label>
+                <input type="text" placeholder="Enter room number" name="uroom" required>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="submit" value="Enter">
+            </div>
+        </div>
+    </form>
+</body>
 </html>

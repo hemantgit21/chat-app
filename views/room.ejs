@@ -7,124 +7,162 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-
-
-
     <style>
-     
-
-     html{
-    width:100%;
-    height:100%;
-}
-body{
-    width:100%;
-    height:100%;
-}
-
-
-.backgroundimg{
-            background-image: url('images/chat-back.jpg');
+        html, body {
+            width: 100%;
             height: 100%;
-            background-position: center; 
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #202020;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .backgroundimg {
+            background-image: url('images/chat-back.jpg');
+            background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-         }
+            padding: 10px; /* Padding for better spacing */
+        }
 
-     #messages { list-style-type: none; margin: 0; padding: 0;  background-color: white;}
-      #messages > li { padding: 0.5rem 1rem;  border-style: solid ;  border-color: #202020;}
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
 
-        
+        #messages > li {
+            padding: 0.5rem 1rem;
+            border-style: solid;
+            border-color: #202020;
+        }
 
+        #input {
+            width: 100%; /* Make the input field full width */
+        }
 
+        @media (max-width: 768px) {
+            .backgroundimg {
+                margin: 10px;
+            }
+
+            #messages > li {
+                padding: 0.25rem 0.5rem;
+            }
+
+            .form-input-container {
+                padding: 0 10px;
+            }
+
+            .form-button-container {
+                text-align: center;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        }
     </style>
-
-  
-
 </head>
-<body style="background-color: #202020;">
-    <br>
+<body>
     <div class="text-center">
-      <h1 style="color: white;"><b>Chat application</b></h1> 
-       </div>
-       
-        
-        <input id="myname"  type="submit" value= <%= username %> class="btn btn-primary" style="margin: 10px 0px 10px 110px; "> 
-   
-        <form action="/logout">
+        <h1 style="color: white;"><b>Chat Application</b></h1>
+    </div>
+
+    <input id="myname" type="submit" value="<%= username %>" class="btn btn-primary" style="margin: 10px 0px 10px 110px; ">
+
+    <form action="/logout">
         <input type="submit" value="Logout" class="btn btn-primary" style="margin: -100px 0px 10px 1400px; ">
-      </form>
-      <h1 class="text-center" style="color: white;">Welcome to Chat Application</h1>
-      <h5 class="text-center" style="color: white;"> <i>'Chat your way to happiness!'</i></h5>
+    </form>
 
+    <h1 class="text-center" style="color: white;">Welcome to Chat Application</h1>
+    <h5 class="text-center" style="color: white;"><i>'Chat the way you like!'</i></h5>
 
-     
-    <div  class="backgroundimg" style="  width: fit-content; block-size: fit-content; border-style:solid; background-color:#202020; border-color: rgb(255, 255, 255);  margin: 50px 440px 550px 440px ;">
+    <div class="backgroundimg">
         <br>
-         
-        <ul id="messages" ></ul>
+        <ul id="messages"></ul>
         <br>
         <form id="form">
-       <div style="padding: 0px 50px 0px 50px;"> 
-       <textarea id="input" placeholder="Enter the message <%= username %> (only 125 characters in one line)" name="message" rows="4" cols="70" ></textarea>
+            <div class="form-input-container">
+                <textarea id="input" placeholder="Enter the message <%= username %> (only 125 characters in one line)" name="message" rows="4" cols="70"></textarea>
+            </div>
+            <div class="form-button-container">
+                <input type="submit" value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
+            </div>
+        </form>
     </div>
-         <div style="padding-left:270px;">
-        <input type="submit"  value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
-    </div>
-      </form>    
-     </div>
-    
-       
-     <script src="/socket.io/socket.io.js"></script>
-     <script>
-       var socket = io();
 
-       var myname1 = document.getElementById('myname');
-       var messages= document.getElementById('messages');
-       var form = document.getElementById('form');
-       var input = document.getElementById('input');
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var myname1 = document.getElementById('myname');
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
 
-     
-       
-       
-        form.addEventListener("submit",function(e){
-        e.preventDefault();
-        if(input.value && myname1.value){
-            
-          socket.emit('send name', myname1.value); 
-          socket.emit('chat message',input.value);
-            input.value='';
-        }
-       });
-        
-           
-       socket.on('send name', (username) => {
-        var name = document.createElement('li');
-        name.style.backgroundColor = "#0096FF";
-        name.style.textAlign = "center";
-        
-        name.style.color = "white";
-        name.textContent = username + "  :";
-        messages.appendChild(name);
-         });
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (input.value && myname1.value) {
+                socket.emit('send name', myname1.value);
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
 
+        socket.on('send name', (username) => {
+            var name = document.createElement('li');
+            name.textContent = username + " :";
 
+            // Adjust styles for different screen sizes
+            if (window.innerWidth <= 768) {
+                name.style.backgroundColor = "#0096FF";
+                name.style.color = "white";
+                name.style.textAlign = "center";
+                name.style.padding = "5px";
+            } else if (window.innerWidth <= 1024) {
+                name.style.backgroundColor = "#0096FF";
+                name.style.color = "white";
+                name.style.textAlign = "center";
+                name.style.padding = "10px";
+            } else {
+                name.style.backgroundColor = "transparent";
+                name.style.color = "black";
+                name.style.textAlign = "left";
+                name.style.padding = "10px";
+            }
 
+            messages.appendChild(name);
+        });
 
+        socket.on('chat message', function (msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
 
-       socket.on('chat message',function(msg){
-        
-        var item = document.createElement('li');
-        item.textContent=msg;
-        messages.appendChild(item);
+            // Adjust styles for different screen sizes
+            if (window.innerWidth <= 768) {
+                item.style.padding = "5px";
+            } else if (window.innerWidth <= 1024) {
+                item.style.padding = "10px";
+            } else {
+                item.style.padding = "15px";
+            }
 
-        // window.scrollTo(0,document.body.scrollHeight);
-       });
+            messages.appendChild(item);
+        });
 
-
-
-     </script>
-
-
+        // Add a window resize event listener to update styles on screen size changes
+        window.addEventListener("resize", function () {
+            // Handle screen size changes here
+            // You can adjust styles dynamically based on the new window.innerWidth
+        });
+    </script>
 </body>
 </html>
