@@ -136,6 +136,7 @@
             
             if (message && myname1) {
                 var chatMessage = myname1 + ": " + message;
+                <br/>
                 socket.emit('chat message', chatMessage);
                 input.value = '';
             }
