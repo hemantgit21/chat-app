@@ -145,30 +145,60 @@ body {
     }
 }
 
+#messages > li img {
+            max-width: 100%; /* Ensure the image doesn't exceed the container width */
+            height: auto; /* Maintain the aspect ratio */
+            border-radius: 10px; /* Adjust as needed */
+        }
+
+
+
+
 @media (max-width: 576px) {
     .backgroundimg {
         padding: 10px;
         background: white;
     }
  
-
-
-    
     #imageInputLabel,#imageInput
     { 
         font-size: 14px;
 
     }
 
-
-
-
     #messages > li {
         padding: 8px;
     }
+
+
+    #messages > li img {
+                max-width: 100%; /* Ensure the image doesn't exceed the container width */
+                height: auto; /* Maintain the aspect ratio */
+            }
+
 }
 
 
+
+@media (max-width: 576px) {
+            /* Your existing media queries */
+
+            #messages > li img {
+                max-width: 100%; /* Ensure the image doesn't exceed the container width */
+                height: auto; /* Maintain the aspect ratio */
+            }
+        }
+
+
+
+@media (max-width: 992px) {
+            /* Your existing media queries */
+
+            #messages > li img {
+                max-width: 100%; /* Ensure the image doesn't exceed the container width */
+                height: auto; /* Maintain the aspect ratio */
+            }
+        }
 
     </style>
 </head>
