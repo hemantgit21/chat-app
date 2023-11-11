@@ -118,6 +118,8 @@ body {
     }
 }
 
+
+
     </style>
 </head>
 <body>
@@ -125,11 +127,15 @@ body {
         <h1 style="color: black;"><b>Chat Application</b></h1>
     </div>
 
-    <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger" style="margin: 10px 0px 10px 110px; ">
-
-    <form action="/logout">
-        <input type="submit" value="Logout" class="btn btn-danger" style="margin: -100px 0px 10px 1400px; ">
-    </form>
+    <div class="d-flex justify-content-between">
+        <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger">
+        
+        <form action="/logout">
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </form>
+    </div>
+    
+    
 
     <h1 class="text-center" style="color: black;">Welcome to Chat Application</h1>
 
