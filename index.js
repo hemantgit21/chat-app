@@ -1,5 +1,3 @@
-// app.js
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -18,29 +16,22 @@ app.set('view engine', 'ejs');
 
 const roomUsers = {};
 
+let uname;
+let uroom;
+
 io.on('connection', (socket) => {
     console.log("user connected");
 
-    socket.on('join room', (data) => {
-        const { username, room } = data;
-
+    socket.on('join-room', ({ username, room }) => {
         // Leave the current room before joining a new one
         if (socket.room) {
             socket.leave(socket.room);
         }
-
         socket.join(room);
-        socket.username = username;
-        socket.room = room;
+        uname = username;
+        uroom = room;
 
-        if (!roomUsers[room]) {
-            roomUsers[room] = [];
-        }
-
-        roomUsers[room].push(username);
-
-        io.to(room).emit('update user list', roomUsers[room]);
-        socket.to(room).emit('chat message', `${username} has joined the room`);
+        io.to(room).emit('updateUserList', getUsersInRoom(room));
     });
 
     socket.on('chat message', (msg) => {
@@ -49,27 +40,38 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.room && roomUsers[socket.room]) {
-            roomUsers[socket.room] = roomUsers[socket.room].filter(user => user !== socket.username);
-            io.to(socket.room).emit('chat message', `${socket.username} has left the room`);
+            roomUsers[socket.room] = roomUsers[socket.room].filter(user => user !== socket.uname);
+            io.to(socket.room).emit('update-user-list', getUsersInRoom(socket.room));
+            io.to(socket.room).emit('chat message', `${socket.uname} has left the room`);
         }
         console.log('user disconnected');
     });
 });
+
+function getUsersInRoom(room) {
+    const users = io.sockets.adapter.rooms[room];
+    return users ? Array.from(users) : [];
+}
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
 app.post('/room', (req, res) => {
-    var room = req.body.uroom;
-    var username = req.body.uname;
-    io.emit('join room', { username, room });
+    const room = req.body.uroom;
+    const username = req.body.uname;
+
+    io.to(room).emit('join-room', { username, room });
+
+    uname = username;
+    uroom = room;
+
     res.redirect(`/room?username=${username}&room=${room}`);
 });
 
 app.get('/room', (req, res) => {
-    var username = req.query.username;
-    var room = req.query.room;
+    const username = req.query.username;
+    const room = req.query.room;
     res.render('room', { username, room });
 });
 

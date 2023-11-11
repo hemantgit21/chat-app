@@ -207,14 +207,25 @@ body {
         <h1 style="color: black;"><b>Chat Application</b></h1>
     </div>
 
-    <div class="d-flex justify-content-between">
-        <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger">
-        <form action="/logout" method="get">
-            <button class="btn btn-danger">Logout</button>
-        </form>
+
+    <div class="navbar">
+        <div>
+            <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger">
+            <input id="myroom" type="submit" value="<%= room %>" class="btn btn-danger">
+        </div>
+        <div>
+            <form action="/logout" method="get">
+                <button class="btn btn-danger">Logout</button>
+            </form>
+        </div>
     </div>
 
+
+
     <h1 class="text-center" style="color: black;">Welcome to Chat Application</h1>
+    <ul id="userList"></ul>
+
+
 
     <div class="backgroundimg">
         <br>
@@ -246,6 +257,31 @@ body {
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');
          var input = document.getElementById('input');
+         
+
+         username =  document.getElementById('myname');
+         room =  document.getElementById('myroom');
+
+
+         socket.emit('join-room', { username, room });
+
+
+
+
+         socket.on('updateUserList', (users) => {
+        // Update the user list on the client side
+        console.log('Users in the room:', users);
+        // Add your logic to display the list of users in the UI
+        // For example, you can use JavaScript to update an HTML element:
+        const userListElement = document.getElementById('userList');
+        userListElement.innerHTML = '';
+        users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = user;
+            userListElement.appendChild(listItem);
+        });
+    });
+
 
            // Add this inside the script tag in room.ejs
            document.getElementById('imageInput').addEventListener('change', function (e) {
@@ -294,9 +330,11 @@ body {
               socket.emit('chat message', imageMessage);
             }
           };
-
-          reader.readAsDataURL(file);
+               
+       reader.readAsDataURL(file);
           imageInput.value = ''; // Clear the file input after processing
+
+          
         }
       }
     });
@@ -307,9 +345,12 @@ body {
       // Check if the message is an image
       if (msg.type === 'image') {
         messageElement.innerHTML = `${msg.username}: <img src="${msg.content}" alt="attachment" class="attached-image">`;
-      } else {
+      } 
+      
+      else {
         messageElement.innerHTML = msg;
-      }
+      } 
+      
 
       // Your existing code to adjust styles based on screen size
 
