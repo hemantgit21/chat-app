@@ -209,33 +209,32 @@ body {
 
     <div class="d-flex justify-content-between">
         <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger">
-        
-        <form action="/logout">
-            <a href="/logout" class="btn btn-danger">Logout</a>
+        <form action="/logout" method="get">
+            <button class="btn btn-danger">Logout</button>
         </form>
     </div>
-    
-    
 
+
+    
     <h1 class="text-center" style="color: black;">Welcome to Chat Application</h1>
 
     <div class="backgroundimg">
         <br>
         <ul id="messages"></ul>
         <br>
-        <form id="form">
+        <form id="form" enctype="multipart/form-data">
             <div class="form-input-container">
                 <textarea id="input" placeholder="Enter the message <%= username %>" name="message" rows="4" cols="70"></textarea>
-                
+
                 <!-- Add input for image and label for attachment icon -->
                 <div class="btn btn-danger" id="imageInputButton">
                     <label for="imageInput" id="imageInputLabel"><i class="fas fa-paperclip"></i> Add image</label>
                     <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
                 </div>
-                
+    
             </div>
             <div class="form-button-container">
-                <input type="submit" value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
+                <input type="submit" id="submitButton" value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
             </div>
         </form>
     </div>
@@ -245,7 +244,7 @@ body {
         var socket = io();
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');
-        var input = document.getElementById('input');
+         var input = document.getElementById('input');
 
            // Add this inside the script tag in room.ejs
            document.getElementById('imageInput').addEventListener('change', function (e) {

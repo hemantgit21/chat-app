@@ -1,4 +1,3 @@
-// app.js
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -15,47 +14,42 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
-// Add this before the io.on('connection') block
 const roomUsers = {};
 
 io.on('connection', (socket) => {
     console.log("user connected");
 
-    socket.on('send name', (username1) => {
-        io.emit('send name', username1);
+    socket.on('join room', (data) => {
+        const { username, room } = data;
+        
+        // Leave the current room before joining a new one
+        if (socket.room) {
+            socket.leave(socket.room);
+        }
+
+        socket.join(room);
+        socket.username = username;
+        socket.room = room;
+
+        if (!roomUsers[room]) {
+            roomUsers[room] = [];
+        }
+
+        roomUsers[room].push(username);
+
+        io.to(room).emit('update user list', roomUsers[room]);
+        socket.to(room).emit('chat message', `${username} has joined the room`);
     });
 
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     });
 
-    socket.on('join room', (data) => {
-        const { username, room } = data;
-        socket.join(room);
-
-        if (!roomUsers[room]) {
-            roomUsers[room] = [];
-        }
-
-        // Add user to the roomUsers list for the specific room
-        roomUsers[room].push(username);
-
-        // Update user list for the specific room
-        io.to(room).emit('update user list', roomUsers[room]);
-
-        // Notify others in the room about the new user
-        socket.to(room).emit('chat message', `${username} has joined the room`);
-    });
-
     socket.on('disconnect', () => {
-        // Remove the user from the roomUsers list when disconnected
-        Object.keys(roomUsers).forEach(room => {
-            roomUsers[room] = roomUsers[room].filter(user => user !== socket.username);
-        });
-
-        // Notify others in the room about the user's disconnection
-        socket.to(socket.room).emit('chat message', `${socket.username} has left the room`);
-
+        if (socket.room && roomUsers[socket.room]) {
+            roomUsers[socket.room] = roomUsers[socket.room].filter(user => user !== socket.username);
+            io.to(socket.room).emit('chat message', `${socket.username} has left the room`);
+        }
         console.log('user disconnected');
     });
 });
@@ -64,18 +58,18 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.post('/', (req, res) => {
+app.post('/room', (req, res) => {
     var room = req.body.uroom;
     username = req.body.uname;
+    io.emit('join room', { username, room });
     res.redirect(`/room?username=${username}&room=${room}`);
 });
+
 
 app.get('/room', (req, res) => {
     var username = req.query.username;
     var room = req.query.room;
-
-    // Set username and room as properties of the socket for later use
-    res.render('room', { username, room });
+ res.render('room', { username, room });
 });
 
 app.get('/logout', (req, res) => {
