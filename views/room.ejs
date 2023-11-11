@@ -96,21 +96,31 @@ body {
     }
 
 
-    #imageInputLabel {
+    #imageInputButton {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+#imageInput {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
     cursor: pointer;
-    font-size: 1.8em; /* Increased the font size */
-    color: black; /* Set the text color to black */
+}
+
+#imageInputLabel {
+    cursor: pointer;
+    font-size: 1.8em;
+    color: black;
 }
 
 #imageInputLabel i {
-    pointer-events: none; /* Make sure the icon doesn't interfere with label clicks */
-    margin-right: 5px; /* Added some spacing between the text and the icon */
-    font-size: 1.3em; /* Increased the font size of the paper-clip icon */
-    color: black; /* Set the color of the paper-clip icon to black */
+    margin-right: 5px;
+    font-size: 1.3em;
+    color: black;
 }
 
 /* Optional: Add a hover effect for better user interaction */
@@ -177,8 +187,10 @@ body {
                 <textarea id="input" placeholder="Enter the message <%= username %>" name="message" rows="4" cols="70"></textarea>
                 
                 <!-- Add input for image and label for attachment icon -->
-                <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
-                <label for="imageInput" id="imageInputLabel"><i class="fas fa-paperclip">Add image</i></label>
+                <div class="btn btn-danger" id="imageInputButton">
+                    <label for="imageInput" id="imageInputLabel"><i class="fas fa-paperclip"></i> Add image</label>
+                    <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
+                </div>
                 
             </div>
             <div class="form-button-container">
