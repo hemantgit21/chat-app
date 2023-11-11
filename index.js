@@ -1,3 +1,5 @@
+// app.js
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -21,7 +23,7 @@ io.on('connection', (socket) => {
 
     socket.on('join room', (data) => {
         const { username, room } = data;
-        
+
         // Leave the current room before joining a new one
         if (socket.room) {
             socket.leave(socket.room);
@@ -60,16 +62,15 @@ app.get('/', (req, res) => {
 
 app.post('/room', (req, res) => {
     var room = req.body.uroom;
-    username = req.body.uname;
+    var username = req.body.uname;
     io.emit('join room', { username, room });
     res.redirect(`/room?username=${username}&room=${room}`);
 });
 
-
 app.get('/room', (req, res) => {
     var username = req.query.username;
     var room = req.query.room;
- res.render('room', { username, room });
+    res.render('room', { username, room });
 });
 
 app.get('/logout', (req, res) => {

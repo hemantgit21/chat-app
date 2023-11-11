@@ -122,8 +122,8 @@ body {
 
     .form-button-container {
         text-align: center;
-        margin-top: 10px;
-        margin-bottom: 10px;
+      
+        margin-top: 10px; margin-bottom: 10px;
     }
 }
 
@@ -203,7 +203,7 @@ body {
     </style>
 </head>
 <body>
-    <div class="text-center">
+ <div class="text-center">
         <h1 style="color: black;"><b>Chat Application</b></h1>
     </div>
 
@@ -214,8 +214,6 @@ body {
         </form>
     </div>
 
-
-    
     <h1 class="text-center" style="color: black;">Welcome to Chat Application</h1>
 
     <div class="backgroundimg">
@@ -224,21 +222,24 @@ body {
         <br>
         <form id="form" enctype="multipart/form-data">
             <div class="form-input-container">
-                <textarea id="input" placeholder="Enter the message <%= username %>" name="message" rows="4" cols="70"></textarea>
+                
+                <textarea id="input"  placeholder="Enter the message <%= username %>" name="message" rows="4" cols="70"></textarea>
+           
 
-                <!-- Add input for image and label for attachment icon -->
-                <div class="btn btn-danger" id="imageInputButton">
+
+                </div>
+                                <!-- Add input for image and label for attachment icon -->
+
+                <div style="margin-top: 30px;" class="btn btn-danger" id="imageInputButton">
                     <label for="imageInput" id="imageInputLabel"><i class="fas fa-paperclip"></i> Add image</label>
                     <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
                 </div>
-    
-            </div>
+            
             <div class="form-button-container">
-                <input type="submit" id="submitButton" value="Send" class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">
+                <input type="submit" id="submitButton" value="Send" class="btn btn-success" style="margin-top: -65px; margin-bottom: 10px;">
             </div>
         </form>
-    </div>
-
+    </div>    
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();

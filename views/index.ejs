@@ -1,3 +1,5 @@
+<!-- index.ejs -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +11,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #007BFF; /* Set a background color */
+            background-color: #007BFF;
             font-family: Arial, sans-serif;
         }
 
@@ -29,7 +31,8 @@
             color: #333;
         }
 
-        .form-container input {
+        .form-container input,
+        .form-container select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -55,50 +58,29 @@
         h1 {
             color: black;
         }
-
-
-
-
-       
-
-
     </style>
 </head>
 <body>
     <div class="text-center">
         <h1><b>Chat application</b></h1>
         <h3>"Connect the Dots, Not just Chats"</h3>
-        
     </div>
-    <form action="/room" method="post" id="roomForm">
-    <div class="form-container">
+    <form action="/room" method="post" id="roomForm" class="form-container">
         <div>
             <label style="color: black;"><b>Username:</b></label>
             <input type="text" placeholder="Enter name" name="uname" required>
         </div>
         <div>
             <label style="color: black;"><b>Room:</b></label>
-            <input type="text" placeholder="Enter room number" name="uroom" required>
+            <select name="uroom" required>
+                <option value="room1">Room 1</option>
+                <option value="room2">Room 2</option>
+                <option value="room3">Room 3</option>
+            </select>
         </div>
         <div>
             <input class="btn btn-secondary" type="submit" value="Enter">
         </div>
-    </div>
-</form>
-    
+    </form>
 </body>
-</html>  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</html>
