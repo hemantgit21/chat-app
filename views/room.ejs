@@ -18,7 +18,7 @@
         }
 
         body {
-            background-color: #202020;
+            background-color: #007BFF;
             font-family: Arial, sans-serif;
         }
 
@@ -30,7 +30,7 @@
         }
 
         .backgroundimg {
-            background-image: url('images/chat-back.jpg');
+            background:whitesmoke;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -51,19 +51,20 @@
             padding: 0;
             background-color: whitespace;
             border-radius: 5px;
-            background-color:#F3E5AB;
 
 
             
         }
 
         #messages > li {
-            padding: 0.5rem 1rem;
-            border-style: solid;
-            border-color: #202020;
-            border-radius: 10px;
+            background-color:bisque;
 
-        }
+    padding: 0.5rem 1rem;
+    border-style: solid;
+    border-color: #202020;
+    border-radius: 10px;
+    margin-bottom: 10px; /* Add margin between messages */
+}
 
         #input {
             width: 100%; /* Make the input field full width */
@@ -97,16 +98,16 @@
 </head>
 <body>
     <div class="text-center">
-        <h1 style="color: white;"><b>Chat Application</b></h1>
+        <h1 style="color: black;"><b>Chat Application</b></h1>
     </div>
 
-    <input id="myname" type="submit" value="<%= username %>" class="btn btn-primary" style="margin: 10px 0px 10px 110px; ">
+    <input id="myname" type="submit" value="<%= username %>" class="btn btn-danger" style="margin: 10px 0px 10px 110px; ">
 
     <form action="/logout">
-        <input type="submit" value="Logout" class="btn btn-primary" style="margin: -100px 0px 10px 1400px; ">
+        <input type="submit" value="Logout" class="btn btn-danger" style="margin: -100px 0px 10px 1400px; ">
     </form>
 
-    <h1 class="text-center" style="color: white;">Welcome to Chat Application</h1>
+    <h1 class="text-center" style="color: black;">Welcome to Chat Application</h1>
 
     <div class="backgroundimg">
         <br>
