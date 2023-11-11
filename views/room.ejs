@@ -12,6 +12,11 @@
     <!-- Add this inside the head tag -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
+    <script defer src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+
+    <!-- Add the EmojiButton library for emoji picking -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.3.0/dist/emoji-button.min.js"></script>
+
    <style>
 html, body {
     width: 100%;
@@ -113,22 +118,7 @@ body {
 
 #imageInputLabel {
     cursor: pointer;
-    font-size: 1.8em;
-    color: black;
-}
-
-#imageInputLabel i {
-    margin-right: 5px;
-    font-size: 1.3em;
-    color: black;
-}
-
-/* Optional: Add a hover effect for better user interaction */
-#imageInputLabel:hover {
-    color: #0056b3;
-}
-
-
+    font-size: 1.8em;}
 
     .form-button-container {
         text-align: center;
@@ -141,6 +131,14 @@ body {
     .backgroundimg {
         padding: 15px;
     }
+      
+      
+    #imageInputLabel,#imageInput
+    { 
+        font-size: 14px;
+
+    }
+
 
     #messages > li {
         padding: 10px;
@@ -150,7 +148,20 @@ body {
 @media (max-width: 576px) {
     .backgroundimg {
         padding: 10px;
+        background: white;
     }
+ 
+
+
+    
+    #imageInputLabel,#imageInput
+    { 
+        font-size: 14px;
+
+    }
+
+
+
 
     #messages > li {
         padding: 8px;
@@ -207,93 +218,72 @@ body {
         var input = document.getElementById('input');
 
            // Add this inside the script tag in room.ejs
-document.getElementById('imageInput').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (file) {
+           document.getElementById('imageInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
         const reader = new FileReader();
         reader.onload = function (event) {
-            const imageMessage = `<img src="${event.target.result}" alt="attachment" class="attached-image">`;
-            socket.emit('chat message', imageMessage);
+          const imageMessage = {
+            type: 'image',
+            content: event.target.result,
+            username: document.getElementById('myname').value,
+          };
+          socket.emit('chat message', imageMessage);
         };
         reader.readAsDataURL(file);
-    }
-});
+      }
+    });
 
-// Modify the existing form submit event listener
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var myname1 = document.getElementById('myname').value;
-    var message = input.value;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var myname1 = document.getElementById('myname').value;
+      var message = input.value;
 
-    if (message || document.getElementById('imageInput').files.length > 0) {
+      if (message || document.getElementById('imageInput').files.length > 0) {
         if (message && myname1) {
-            var chatMessage = myname1 + ": " + message;
-            socket.emit('chat message', chatMessage);
-            input.value = '';
+          var chatMessage = myname1 + ': ' + message;
+          socket.emit('chat message', chatMessage);
+          input.value = '';
         }
 
         // Check if an image is attached and handle it separately
         const imageInput = document.getElementById('imageInput');
         if (imageInput.files.length > 0) {
-            const file = imageInput.files[0];
-            const reader = new FileReader();
+          const file = imageInput.files[0];
+          const reader = new FileReader();
 
-            reader.onload = function (event) {
-                const imageMessage = `<img src="${event.target.result}" alt="attachment" class="attached-image">`;
-
-                // Emit the image message only if it's not sent along with a text message
-                if (!message) {
-                    socket.emit('chat message', imageMessage);
-                }
+          reader.onload = function (event) {
+            const imageMessage = {
+              type: 'image',
+              content: event.target.result,
+              username: myname1,
             };
 
-            reader.readAsDataURL(file);
-            imageInput.value = ''; // Clear the file input after processing
+            // Emit the image message only if it's not sent along with a text message
+            if (!message) {
+              socket.emit('chat message', imageMessage);
+            }
+          };
+
+          reader.readAsDataURL(file);
+          imageInput.value = ''; // Clear the file input after processing
         }
-    }
-});
+      }
+    });
 
+    socket.on('chat message', function (msg) {
+      var messageElement = document.createElement('li');
 
+      // Check if the message is an image
+      if (msg.type === 'image') {
+        messageElement.innerHTML = `${msg.username}: <img src="${msg.content}" alt="attachment" class="attached-image">`;
+      } else {
+        messageElement.innerHTML = msg;
+      }
 
+      // Your existing code to adjust styles based on screen size
 
-
-
-
-    
-        // form.addEventListener("submit", function (e) {
-        //     e.preventDefault();
-        //     var myname1 = document.getElementById('myname').value;
-        //     var message = input.value;
-            
-        //     if (message && myname1) {
-        //         var chatMessage = myname1 + ": " + message;
-        //         socket.emit('chat message', chatMessage);
-        //         input.value = '';
-        //     }
-        // });
-    
-        socket.on('chat message', function (msg) {
-    var messageElement = document.createElement('li');
-    messageElement.innerHTML = msg; // Use innerHTML to render HTML content
-
-    // Adjust styles for different screen sizes
-    if (window.innerWidth <= 768) {
-        messageElement.style.padding = "5px";
-    } else if (window.innerWidth <= 1024) {
-        messageElement.style.padding = "10px";
-    } else {
-        messageElement.style.padding = "15px";
-    }
-
-    messages.appendChild(messageElement);
-});
-    
-        // Add a window resize event listener to update styles on screen size changes
-        window.addEventListener("resize", function () {
-            // Handle screen size changes here
-            // You can adjust styles dynamically based on the new window.innerWidth
-        });
-    </script>
-    
+      messages.appendChild(messageElement);
+    });
+  </script>
 </body>
-</html>
